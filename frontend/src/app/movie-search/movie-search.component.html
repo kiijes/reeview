@@ -1,0 +1,13 @@
+<form #searchForm="ngForm" (ngSubmit)="onSubmit(searchForm.value)">
+  <div class="form-group">
+    <input ngModel type="text" class="form-control" name="search" id="search" required placeholder="Search for title">
+  </div>
+  <input type="submit" id="submit" class="btn btn-primary" [disabled]="!searchForm.form.valid" value="Search">
+</form>
+<p *ngIf="isError" class="text-danger">{{ error }}</p>
+
+<div *ngFor="let res of results">
+  <a routerLink="/movie/{{res._id}}">{{ res.title }}</a>
+  <p><small>directed by: {{ res.director }}</small><br>
+  <small>year of release: {{ res.year }}</small></p>
+</div>

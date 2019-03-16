@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <div class="movie-info" *ngIf="!movieEditToggle && movie">
+        <h1>
+          {{ movie.title }}
+        </h1>
+        <p>Director: {{ movie.director }}</p>
+        <p>Year of release: {{ movie.year }}</p>
+        <p>Review score: {{ score }}</p>
+        <a routerLink="/movies" class="btn btn-primary">Go back</a>
+        <button *ngIf="this.authServ.isAdmin()" class="btn btn-primary" (click)="editMovieToggle()">Edit</button>
+        <button *ngIf="this.authServ.isAdmin()" class="btn btn-danger" (click)="delete()">Delete</button>
+      </div>
+
+      <div class="movie-edit" *ngIf="movieEditToggle">
+        <form #movieForm="ngForm" (ngSubmit)="onMovieEditSubmit(movieForm.value, movie._id)">
+          <div class="form-group">
+            <label for="title">Movie title</label>
+            <input ngModel type="text" class="form-control" maxlength="200" name="title" id="title" required placeholder="{{ movie.title }}">
+          </div>
+          <div class="form-group">
+            <label for="year">Release year</label>
+            <input ngModel type="number" class="form-control" name="year" id="year" required placeholder="{{ movie.year }}">
+          </div>
+          <div class="form-group">
+            <label for="director">Director</label>
+            <input ngModel type="text" class="form-control" maxlength="100" name="director" required id="director" placeholder="{{ movie.director }}">
+          </div>
+          <button *ngIf="this.authServ.isAdmin()" class="btn btn-danger" (click)="editMovieToggle()">CANCEL</button>
+          <input type="submit" id="submit" class="btn btn-success" [disabled]="!movieForm.form.valid" value="Submit">
+        </form>
+      </div>
+
+    </div>
+    <div class="col-sm">
+        <h1>Seen the movie? Give it a score!</h1>
+        <div *ngIf="!userReviewScore">
+          <form #reviewForm="ngForm" *ngIf="this.authServ.getToken()" (ngSubmit)="onSubmit(reviewForm.value)" id="reviewForm">
+            <label for="score">Pick a grade: </label>
+            <select ngModel required name="score" id="score">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+            <input type="submit" class="btn btn-success" [disabled]="!reviewForm.form.valid" value="Submit">
+          </form>
+        </div>
+
+        <div *ngIf="userReviewScore && this.authServ.getToken()">
+          <p>You have given this movie a rating of {{ userReviewScore }}</p>
+          <button *ngIf="this.authServ.getToken()" class="btn btn-danger" (click)="deleteReview()">Delete your score</button>
+        </div>
+        
+        
+        <p *ngIf="!this.authServ.getToken()">You need to be registered to review.</p>
+      </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm">
+      <h1>Comments</h1>
+      <p *ngIf="!comments">No one has commented this movie.</p>
+
+      <div *ngIf="comments" class="comment-area">
+        <div class="comment-entry" *ngFor="let comment of comments.slice().reverse()">
+          <div *ngIf="this.comment._id !== commentToEdit" class="comment-display">
+            <p><small>#{{ comments.indexOf(comment) }}</small> - <i>{{ comment.user }}</i></p>
+            <p><small>Posted on {{ formatDate(comment.date) }}</small></p>
+            <p>{{ comment.comment }}</p>
+            <p><small *ngIf="this.comment.editDate > this.comment.date">Edited on {{ formatDate(comment.editDate) }} by {{ comment.editedBy }}</small></p>
+            <button *ngIf="user_id === comment.user_id || this.authServ.isAdmin()" class="btn btn-primary" (click)="editToggle(comment)">EDIT</button>
+            <button *ngIf="user_id === comment.user_id || this.authServ.isAdmin()" class="btn btn-danger delete" (click)="deleteComment(comment._id, comment.user_id)">DELETE</button>
+          </div>
+
+          <div *ngIf="this.comment._id === commentToEdit" class="comment-edit">
+            <p><small>#{{ comments.indexOf(comment) }}</small> - <i>{{ comment.user }}</i></p>
+            <p><small>Posted on {{ formatDate(comment.date) }}</small></p>
+            <form #editForm="ngForm" (ngSubmit)="onCommentEditSubmit(editForm.value, this.comment._id, this.comment.user_id)">
+              <p *ngIf="commentEditError" class="text-danger">{{ commentEditError }}</p>
+              <textarea name="editComment" id="editComment" [(ngModel)]="textToEdit" required></textarea>
+              <p><small *ngIf="this.comment.editDate > this.comment.date">Edited on {{ formatDate(comment.editDate) }} by {{ comment.editedBy }}</small></p>
+              <button *ngIf="user_id === comment.user_id || this.authServ.isAdmin()" class="btn btn-danger" (click)="editToggle('cancel')">CANCEL</button>
+              <input type="submit" *ngIf="user_id === comment.user_id || this.authServ.isAdmin()" [disabled]="!editForm.form.valid" class="btn btn-success" value="SUBMIT">
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm">
+      <h1>Add comment</h1>
+      <form #commentForm="ngForm" *ngIf="this.authServ.getToken()" (ngSubmit)="onCommentSubmit(commentForm.value)" id="commentForm">
+        <p *ngIf="commentError" class="text-danger">{{ commentError }}</p>
+        <textarea [(ngModel)]="defaultValue" name="commentArea" id="commentArea" cols="30" rows="5" required></textarea>
+        <input type="submit" [disabled]="!commentForm.form.valid" value="Post comment">
+      </form>
+
+      <p *ngIf="!this.authServ.getToken()">You need to be registered to comment.</p></div>
+    </div>
+
+</div>

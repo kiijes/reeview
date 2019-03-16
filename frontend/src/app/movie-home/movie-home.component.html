@@ -1,0 +1,14 @@
+<div class="container">
+  <h1>movie home</h1>
+  <p *ngIf="error" class="text-danger">{{ error }}</p>
+  <div class="row">
+    <div class="col-sm">
+      <h2>search a movie</h2>
+      <app-movie-search></app-movie-search>
+    </div>
+    <div class="col-sm">
+      <h2>latest entries</h2>
+      <app-movie-latest></app-movie-latest>
+    </div>
+  </div>
+</div>

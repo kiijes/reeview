@@ -1,0 +1,17 @@
+<h1>Add a movie</h1>
+<form #movieForm="ngForm" (ngSubmit)="onSubmit(movieForm.value)">
+  <div class="form-group">
+    <label for="title">Movie title</label>
+    <input ngModel type="text" class="form-control" maxlength="200" name="title" id="title" required placeholder="Movie title">
+  </div>
+  <div class="form-group">
+    <label for="year">Release year</label>
+    <input ngModel type="number" class="form-control" name="year" id="year" required placeholder="Release year">
+  </div>
+  <div class="form-group">
+    <label for="director">Director</label>
+    <input ngModel type="text" class="form-control" maxlength="100" name="director" required id="director" placeholder="Director of the movie">
+  </div>
+  <input type="submit" class="btn btn-primary" [disabled]="!movieForm.form.valid" value="Submit">
+</form>
+<p *ngIf="isError" class="text-danger">{{ error }}</p>

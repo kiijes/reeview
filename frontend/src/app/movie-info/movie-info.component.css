@@ -1,0 +1,37 @@
+#reviewForm label, #reviewForm select {
+    display: block;
+}
+#reviewForm select {
+    margin-bottom: 1vh;
+}
+
+.movie-info button {
+    margin-left: 1vh;
+}
+
+.movie-edit #submit {
+    margin-left: 1vh;
+}
+
+#commentArea {
+    display: block;
+}
+
+.comment-entry {
+    background-color: rgb(201, 201, 201);
+    margin-bottom: 1vh;
+    padding: 1vh;
+}
+
+.comment-edit textarea {
+    display: block;
+    margin-bottom: 1vh;
+}
+
+.comment-edit button {
+    margin-right: 1vh;
+}
+
+.comment-display .delete {
+    margin-left: 1vh;
+}

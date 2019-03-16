@@ -1,0 +1,5 @@
+<div *ngFor="let mov of movies">
+  <a routerLink="/movie/{{mov._id}}">{{ mov.title }}</a>
+  <p><small>directed by: {{ mov.director }}</small><br>
+  <small>year of release: {{ mov.year }}</small></p>
+</div>

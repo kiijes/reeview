@@ -1,0 +1,6 @@
+<h1>All movies</h1>
+<div *ngFor="let res of results">
+    <a routerLink="/movie/{{res._id}}">{{ res.title }}</a>
+    <p><small>directed by: {{ res.director }}</small><br>
+    <small>year of release: {{ res.year }}</small></p>
+</div>
